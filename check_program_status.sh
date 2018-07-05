@@ -51,7 +51,7 @@ function KILL_PROGRAM () {
 
 #	SEND_MAIL 发邮件函数。
 function SEND_MAIL() {
-	FROM_MAIL="lijing@360.cn"
+	FROM_MAIL="lijing@opsxyz.com"
 	TO_MAIL="lij970@13322.com"
 	echo -e "Dear \n \b  sir \n \b		because port $PORT is down,\n \b 	so killed $PROGRAM $1 . \n \n \n \b From $FROM_MAIL \n \b $DATE"|mail -s "$IP port $PORT is down $DATE " -r $FROM_MAIL $TO_MAIL
 }
