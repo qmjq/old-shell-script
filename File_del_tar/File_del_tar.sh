@@ -25,9 +25,9 @@ function F_TAR_FILE () {
 	#tar czvf $TAR_NAME.$(date --date="-1 day" +%Y%m%d).tar.gz $(find $DIR_PATH -mindepth 2 -mtime -2 -mtime +0 ) && find $DIR_PATH -mindepth 2 -mtime -2 -mtime +0 -exec rm -rf {} \;
 	#	二选一
 	#	tar 归档成功 就删除原文件
-	#tar czvf $TAR_NAME.$(date --date="-1 day" +%Y%m%d).tar.gz $(find -mindepth 2 -mtime 6 ) && find -mindepth 2 -mtime 6 -exec rm -rf {} \;
+	#tar czvf $TAR_NAME.$(date --date="-1 day" +%Y%m%d).tar.gz $(find -mindepth 2 -mtime 1 ) && find -mindepth 2 -mtime 1 -exec rm -rf {} \;
 	#	tar 归档成功与否 都删除原文件
-	tar czvf $TAR_NAME.$(date --date="-1 day" +%Y%m%d).tar.gz $(find -mindepth 2 -mtime 6 ) ; find -mindepth 2 -mtime 6 -exec rm -rf {} \;
+	tar czvf $TAR_NAME.$(date --date="-1 day" +%Y%m%d).tar.gz $(find -mindepth 2 -mtime 1 ) ; find -mindepth 2 -mtime 1 -exec rm -rf {} \;
 }
 
 #	主程序
