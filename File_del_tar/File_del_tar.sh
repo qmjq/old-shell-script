@@ -17,7 +17,7 @@ function F_DEL_FILE () {
 	echo ..............
 	echo $DIR_PATH $FILE_KEYNAME $DAYS_AGO 
 	[ -z $FILE_KEYNAME ] && find $DIR_PATH -mindepth 2 -mtime +$DAYS_AGO -exec rm -rf {} \;  || find $DIR_PATH -mindepth 2 -mtime +$DAYS_AGO -name $FILE_KEYNAME -exec rm -f {} \;
-	find $DIR_PATH -mindepth 1 -mtime +$DAYS_AGO -name $TAR_NAME*.tar.gz -exec rm -f {} \;
+	find $DIR_PATH -mindepth 1 -mtime +$DAYS_AGO -name "$TAR_NAME*.tar.gz" -exec rm -f {} \;
 }
 
 #	tar归档前一天的文件		
