@@ -27,9 +27,10 @@ function F_SSHD () {
 
 #执行文件PUSH同步
 function F_PUSH_RSYNC () {
-				echo $2 $WHOAMI@$1:$4/             
-                
-                rsync -vzrlptD -e "ssh -p $2"    --exclude="*.log" --exclude="*.log.*" --exclude="^logs$ " --exclude="$5"   $PWD/$3/*  $WHOAMI@$1:$4/                
+		echo $2 $WHOAMI@$1:$4/             
+                rm -rf ./$5 >/dev/null 2>&1;
+                rsync -vzrlptD -e "ssh -p $2"    --exclude="*.log" --exclude="*.log.*" --exclude="^logs$ "  $PWD/$3/*  $WHOAMI@$1:$4/
+                #rsync -vzrlptD -e "ssh -p $2"    --exclude="*.log" --exclude="*.log.*" --exclude="^logs$ " --exclude="$5"   $PWD/$3/*  $WHOAMI@$1:$4/                
                 #rsync -avz  -e "ssh -p $2"  --exclude="*.log" --exclude="*.log.*" --exclude="^logs$ " --exclude="$5"   $PWD/$3/*  $WHOAMI@$1:$4/
 }
 
@@ -53,7 +54,7 @@ function F_PUSH_SSHD () {
                 F_PUSH_RSYNC $REMOTE_IP	$PORT 	""  "/home/webroot/morseapp-api"
                 F_PUSH_RSYNC $REMOTE_IP $PORT	""  "/home/webroot/morseapp-api-swoole" 
                 
-				#范例 同步当前目录文件abc 到端口为PORT的远程主机 目录 ，并排除 A/B/C               
+		#范例 同步当前目录文件abc 到端口为PORT的远程主机 目录 ，并排除 A/B/C               
                 #     F_PUSH_RSYNC $REMOTE_IP	$PORT 	"abc"  "/home/webroot/morseapp-api" "A/B/C"
         
                 #执行远程命令
