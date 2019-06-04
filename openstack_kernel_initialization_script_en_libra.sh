@@ -48,6 +48,7 @@ echo "
 	    net.ipv4.conf.all.arp_announce=2
 
 	    net.ipv4.tcp_max_tw_buckets = 5000
+	    #net.ipv4.tcp_tw_reuse = 1    #Allow TIME-WAIT sockets to be reused for new TCP connections
 	    net.ipv4.tcp_syncookies = 1
 	    net.ipv4.tcp_max_syn_backlog = 10240
 	    net.ipv4.tcp_synack_retries = 2
