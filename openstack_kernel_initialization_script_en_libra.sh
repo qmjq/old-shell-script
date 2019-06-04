@@ -32,7 +32,7 @@ echo "
 # add by qmjq www.opsxyz.com 
 	fs.file-max=655360           
 	vm.max_map_count=655360
-	net.core.somaxconn = 1024
+	net.core.somaxconn = 10240
 	vm.overcommit_memory = 1  
 # For more information, see sysctl.conf(5) and sysctl.d(5).
 	    #net.ipv6.conf.all.disable_ipv6 = 1
@@ -49,7 +49,7 @@ echo "
 
 	    net.ipv4.tcp_max_tw_buckets = 5000
 	    net.ipv4.tcp_syncookies = 1
-	    net.ipv4.tcp_max_syn_backlog = 1024
+	    net.ipv4.tcp_max_syn_backlog = 10240
 	    net.ipv4.tcp_synack_retries = 2
 	    net.ipv4.tcp_syn_retries = 3
 	    kernel.sysrq=1           " >>  /etc/sysctl.conf
