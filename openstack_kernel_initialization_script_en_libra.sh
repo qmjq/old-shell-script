@@ -2,7 +2,7 @@
 #git:https://github.com/QMJQ
 #blog:http://www.opsxyz.com 
 #     http://qiaomiao.blog.51cto.com
-#date: 20181211 v1.0
+#date: 20181211 v2.0
 #author:QMJQ
 #description: inital openstack  env  and kernel arg
 
@@ -57,6 +57,11 @@ echo "
 
 sysctl -p && ulimit -a
 
+# MongoDB 、Redis 、Oracle 、HDFS 
+   echo "
+   	# at MongoDB 、Redis 、Oracle 、HDFS uncomment 
+   	#echo never >>  /sys/kernel/mm/transparent_hugepage/enabled 
+   	#echo never >>  /sys/kernel/mm/transparent_hugepage/defrag  " >> /etc/rc.local
 # modfied network service
    sed -i 's/HWADDR/#HWADDR/g' /etc/sysconfig/network-scripts/ifcfg-eth0 && systemctl restart network 
 
