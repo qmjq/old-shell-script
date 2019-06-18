@@ -1,6 +1,6 @@
 # my_shell_script
 
-These scripts are used in my work. all it written  by me .
+The scripts used in my work.  I wrote it. 
 
 
 QQ 858080796 
