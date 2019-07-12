@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 #git:https://github.com/QMJQ
 #blog:http://www.opsxyz.com 
 #     http://qiaomiao.blog.51cto.com
