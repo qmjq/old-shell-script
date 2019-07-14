@@ -36,14 +36,11 @@ function F_LOOP_SCRIPT () {
 	echo $USER
 	while true :
 		do
+		sleep 5
 		for x in $REMOTE_IP
 		    do 
-			sleep 5 
-			while true :
-    				do      
-				  tcping -t 3 $x $PORT |grep -Ev "timeout|close" || F_DO_THIRD_SCRIPT $1 $2 "$3$x\端口$PORT" $4 
-				break
-			done;
+			#sleep 5 
+			tcping -t 3 $x $PORT |grep -Ev "timeout|close" >/dev/null || F_DO_THIRD_SCRIPT $1 $2 "$3$x\端口$PORT" $4 	
 		done;
 	done;
 }
