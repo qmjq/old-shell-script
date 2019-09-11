@@ -16,8 +16,7 @@ REMOTE_IP=$REMOTE_IP
 TEST_PORT=$TEST_PORT
 TEST_IP=$TEST_IP
 DEPLOY_OR_ROLLBACK=$DEPLOY_OR_ROLLBACK
-DIR=$DIR
-
+REMOTE_DIR=$REMOTE_DIR
 
 #取远程IP
 function F_REMOTE_IP (){
@@ -25,10 +24,10 @@ function F_REMOTE_IP (){
          echo ${REMOTE_IP[@]}
 }
 
-#取远程目录
-function F_DIR (){
-         DIR=($(echo $DIR|awk 'NF'))
-         echo ${DIR[@]}
+#取远程服务目录
+function F_REMOTE_DIR (){
+         REMOTE_DIR=($(echo $REMOTE_DIR|awk 'NF'))
+         echo ${REMOTE_DIR[@]}
 }
 
 #执行远程命令
@@ -88,7 +87,7 @@ function F_PUSH_UPDATE () {
           
           
           #范例 同步当前目录文件abc 到端口为PORT的远程主机 目录 ，并排除 A/B/C               
-          F_PUSH_RSYNC $REMOTE_IP	$PORT 	"msg_server"             "/data/server/msgserver/$DIR" ""
+          F_PUSH_RSYNC $REMOTE_IP	$PORT 	"msg_server"             "/data/server/msgserver/$REMOTE_DIR02" ""
           #F_PUSH_RSYNC $REMOTE_IP	$PORT 	"notify_server"          "/data/server/notifyserver/notify" ""
 
           
@@ -135,7 +134,7 @@ function F_PUSH_BACK () {
              
              
           #回滚函数 
-          F_PUSH_BACK_RSYNC $REMOTE_IP	$PORT 	"/data/server/updatebak/msg_server"              "/data/server/msgserver/$DIR" ""
+          F_PUSH_BACK_RSYNC $REMOTE_IP	$PORT 	"/data/server/updatebak/msg_server"              "/data/server/msgserver/$REMOTE_DIR02" ""
           #F_PUSH_BACK_RSYNC $REMOTE_IP	$PORT 	"/data/server/updatebak/notify_server"           "/data/server/notifyserver/notify" ""
           
           
@@ -170,22 +169,25 @@ function F_PUSH_SSHD () {
         F_PULL_RSYNC $TEST_IP $TEST_PORT "" "/data/server/lib/libdatabase.so" ""
         
         F_REMOTE_IP
-        num=${#REMOTE_IP[@]}
+        F_REMOTE_DIR
 
+        num=${#REMOTE_IP[@]}
         for ((i=0;i<$num;i++))
         do
                 REMOTE_IP=${REMOTE_IP[i]}
-                
-				for ((y=0;y<$num;y++))
-        		do
-                	DIR=${DIR[y]}  	
-                	F_DEPLOY_BACK
+  			
+                num02=${#REMOTE_DIR[@]}
+                for ((y=0;y<$num02;y++))
+                do
+                        REMOTE_DIR02=${REMOTE_DIR[y]}
+						F_DEPLOY_BACK
                 done
+
                 
                 #F_SSHD  $REMOTE_IP 	$PORT 	"\cp -r /data/server/msgserver/msg/msg_server /data/server/notifyserver/notify/notify_server /data/server/msgserver/lib/libbase.so /data/server/msgserver/lib/libcommongrpc.so /data/server/msgserver/lib/libdatabase.so /data/server/updatebak && tar -zcvf  /data/server/updatebak.$(date +%Y%m%d%H%M).tar.gz  -C /data/server/ updatebak"
                 F_SSHD  $REMOTE_IP 	$PORT 	"\cp -r /data/server/msgserver/msg/msg_server /data/server/msgserver/lib/libbase.so /data/server/msgserver/lib/libcommongrpc.so /data/server/msgserver/lib/libdatabase.so /data/server/updatebak && tar -zcvf  /data/server/updatebak.$(date +%Y%m%d%H%M).tar.gz  -C /data/server/ updatebak"
                 
-
+                
         done
 
 }
