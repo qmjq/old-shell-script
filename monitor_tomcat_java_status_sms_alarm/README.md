@@ -1,4 +1,4 @@
-# my_shell_script
+# monitor_tomcat_java_status_sms_alarm
 
 These scripts are used in my work. all it written  by me .
 
