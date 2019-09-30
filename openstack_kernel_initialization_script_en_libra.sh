@@ -53,7 +53,8 @@ echo "
 	    net.ipv4.conf.all.arp_announce=2
 
 	    net.ipv4.tcp_max_tw_buckets = 5000
-	    #net.ipv4.tcp_tw_reuse = 1    #Allow TIME-WAIT sockets to be reused for new TCP connections
+	    net.ipv4.tcp_fin_timeout = 10
+	    net.ipv4.tcp_tw_reuse = 1    #Allow TIME-WAIT sockets to be reused for new TCP connections
 	    net.ipv4.tcp_syncookies = 1
 	    net.ipv4.tcp_max_syn_backlog = 10240
 	    net.ipv4.tcp_synack_retries = 2
@@ -72,6 +73,13 @@ sysctl -p && ulimit -a
 
 # modfied sshd service
    sed -i '65d' /etc/ssh/sshd_config && sed -i '64a PasswordAuthentication yes' /etc/ssh/sshd_config && systemctl restart sshd
+
+# modfied firewalld service and setenforce
+   systemctl stop firewalld.service ; systemctl disable firewalld.service
+   setenforce 0 ;sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
+
+# modfied timezone 
+   timedatectl set-timezone Asia/Shanghai
 
 
 # end
