@@ -9,7 +9,7 @@ function CHECK_JOB (){
 
 function CHECKOUT_BRANCH (){
 	[ -z $1 ] && echo "请输入要发布的分支" && exit 1
-	git checkout -f $1 2>/dev/null && git pull &&  echo "成功切换到分支$1,拉取成功" ||echo "分支$1 切换失败,拉取失败" ; git checkout -f $1 2>/dev/null || exit 1
+	git pull -f >/dev/null && git checkout -f $1 2>/dev/null && git pull &&  echo "成功切换到分支$1,拉取成功" ||echo "分支$1 切换失败,拉取失败" ; git checkout -f $1 2>/dev/null || exit 1
 }
 
 function  PNPM_RUN  (){
