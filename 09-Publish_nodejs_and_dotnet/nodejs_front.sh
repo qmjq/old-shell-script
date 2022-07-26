@@ -9,11 +9,18 @@ function CHECK_JOB (){
 
 function CHECKOUT_BRANCH (){
 	[ -z $1 ] && echo "请输入要发布的分支" && exit 1
-	git pull -f >/dev/null && git checkout -f $1 2>/dev/null && git pull &&  echo "成功切换到分支$1,拉取成功" ||echo "分支$1 切换失败,拉取失败" ; git checkout -f $1 2>/dev/null || exit 1
+	git pull -f >/dev/null && git checkout -f $1 2>/dev/null && git pull -f &&  echo "成功切换到分支$1,拉取成功" ||echo "分支$1 切换失败,拉取失败" ; git checkout -f $1 2>/dev/null || exit 1
 }
 
 function  PNPM_RUN  (){
-	source /etc/profile && pnpm install || exit 1 && pnpm run build  || exit 1 && mkdir -p $(dirname $(pwd))/front/$1 && rm -rf $(dirname $(pwd))/front/$1/dist && mv dist $(dirname $(pwd))/front/$1
+	case "$1" in
+		Packet_OutCustome_PC_UI)
+			source /etc/profile && pnpm install || exit 1 && pnpm run build:test  || exit 1 && mkdir -p $(dirname $(pwd))/front/$1 && rm -rf $(dirname $(pwd))/front/$1/dist && mv dist $(dirname $(pwd))/front/$1
+		;;
+		*)
+			source /etc/profile && pnpm install || exit 1 && pnpm run build  || exit 1 && mkdir -p $(dirname $(pwd))/front/$1 && rm -rf $(dirname $(pwd))/front/$1/dist && mv dist $(dirname $(pwd))/front/$1
+		;;
+	esac
 } 
 
 function NGINX_RUN () {
