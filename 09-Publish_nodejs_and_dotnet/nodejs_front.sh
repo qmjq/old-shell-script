@@ -1,5 +1,5 @@
 #!/bin/bash
-#date: 20220720 v2.0 20220720
+#date: 20220720 v3.0 20220808
 #author:QMJQ 
 
 function CHECK_JOB (){
@@ -13,12 +13,19 @@ function CHECKOUT_BRANCH (){
 }
 
 function  PNPM_RUN  (){
+	JOB=$2
 	case "$1" in
-		Packet_OutCustome_PC_UI)
-			source /etc/profile && pnpm install || exit 1 && pnpm run build:test  || exit 1 && mkdir -p $(dirname $(pwd))/front/$1 && rm -rf $(dirname $(pwd))/front/$1/dist && mv dist $(dirname $(pwd))/front/$1
+		master)
+			source /etc/profile && pnpm install || exit 1 && pnpm run build  || exit 1 && mkdir -p $(dirname $(pwd))/front/$JOB && rm -rf $(dirname $(pwd))/front/$JOB/dist && mv dist $(dirname $(pwd))/front/$JOB
+		;;
+		test)
+			source /etc/profile && pnpm install || exit 1 && pnpm run build:test  || exit 1 && mkdir -p $(dirname $(pwd))/front/$JOB && rm -rf $(dirname $(pwd))/front/$JOB/dist && mv dist $(dirname $(pwd))/front/$JOB
+		;;
+		uat)
+			source /etc/profile && pnpm install || exit 1 && pnpm run build:uat  || exit 1 && mkdir -p $(dirname $(pwd))/front/$JOB && rm -rf $(dirname $(pwd))/front/$JOB/dist && mv dist $(dirname $(pwd))/front/$JOB
 		;;
 		*)
-			source /etc/profile && pnpm install || exit 1 && pnpm run build  || exit 1 && mkdir -p $(dirname $(pwd))/front/$1 && rm -rf $(dirname $(pwd))/front/$1/dist && mv dist $(dirname $(pwd))/front/$1
+			source /etc/profile && pnpm install || exit 1 && pnpm run build:uat  || exit 1 && mkdir -p $(dirname $(pwd))/front/$JOB && rm -rf $(dirname $(pwd))/front/$JOB/dist && mv dist $(dirname $(pwd))/front/$JOB
 		;;
 	esac
 } 
@@ -66,7 +73,7 @@ function main (){
 	JOB=$(ls * -d|grep -Ei $JOB)
 	mkdir -p $JOB && cd $JOB
   	
-	CHECKOUT_BRANCH $BRANCH ; PNPM_RUN $JOB ; NGINX_RUN $JOB
+	CHECKOUT_BRANCH $BRANCH ; PNPM_RUN $BRANCH $JOB ; NGINX_RUN $JOB
 	 
 }
 
