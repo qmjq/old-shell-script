@@ -1,6 +1,6 @@
 #!/bin/bash
 #git:https://github.com/QMJQ
-#blog:http://www.opsxyz.com 
+#blog:http://qmjq.github.io 
 #     http://qiaomiao.blog.51cto.com
 #date: 20181211 v2.0
 #author:QMJQ
@@ -20,7 +20,7 @@ EOF
 # set kernel args
 echo "
 	
-# add by qmjq www.opsxyz.com
+# add by qmjq qmjq.github.io
 	
 	 *       soft    nofile  65536 
  	 *       hard    nofile  65536 
@@ -32,7 +32,7 @@ echo "
     rm -rf /etc/security/limits.d/20-nproc.conf 
 echo "
 
-# add by qmjq www.opsxyz.com 
+# add by qmjq qmjq.github.io 
 
 	fs.file-max=655360           
 	vm.max_map_count=655360

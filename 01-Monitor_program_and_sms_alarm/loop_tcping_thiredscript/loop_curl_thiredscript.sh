@@ -1,6 +1,6 @@
 #!/bin/bash
 #git:https://github.com/QMJQ
-#blog:http://www.opsxyz.com 
+#blog:http://qmjq.github.io 
 #     http://qiaomiao.blog.51cto.com
 #date: 20190806 v1.0
 #author:QMJQ

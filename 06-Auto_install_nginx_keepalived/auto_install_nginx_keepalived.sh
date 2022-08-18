@@ -1,5 +1,5 @@
 #!/bin/bash
-#mysite:	http://www.opsxyz.com 
+#mysite:	http://qmjq.github.io 
 #github:	http://github.com/qmjq
 #blog:		http://qiaomiao.blog.51cto.com
 #date: 20171212 v1.0
