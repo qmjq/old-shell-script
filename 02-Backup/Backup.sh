@@ -12,7 +12,7 @@ DATE=$(date +%Y%m%d)
 WHOAMI=$(whoami)
 LOG=${0}.${DATE}.log
 TOBACKUPDIR=/data/backup
-NEEDBACKUPFILE=" "
+NEEDBACKUPDIR=" "
 KEEPDAY=1
 
 
@@ -32,7 +32,8 @@ function F_SSHD () {
 }	
 #	需要备份目录
 function F_NEEDBACKUPFILE (){
-	NEEDBACKUPFILE=($(F_SSHD $1 "find $2 -maxdepth 1  \( -path "$2/lost+found" -o -path "$2/backup" -o -path "$2/*log*" -o -path "$2/brick*" \) -prune -o  -type d -print" | awk -F"$2/" '{print $2}' |awk 'NF'))
+	#find 理论上用""就可以，但是两次函数转换，所以用了 '""'
+	NEEDBACKUPFILE=($(F_SSHD $1 "find $2 -maxdepth 1  \( -path "$2/lost+found" -o -path "$2/backup" -o -path '"$2/*.log"' -o -path '"$2/brick*"' \) -prune -o  -path '"*"' -print" | awk -F"$2/" '{print $2}' |awk 'NF'))
 	echo ${NEEDBACKUPFILE[@]}
 }
 #	备份函数
@@ -41,14 +42,16 @@ function F_RSYNC () {
 	num=${#NEEDBACKUPFILE[@]}
 
 	for ((i=0;i<$num;i++))
-	do
-  		rsync -vzrtopg --delete --exclude="*.log" --exclude="*.log.*" --exclude="^logs$"  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]}/ ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
+	do      
+  		[ -f $2/${NEEDBACKUPFILE[i]} ] && rsync -vzrtopg --delete  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]} ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
+  		[ -d $2/${NEEDBACKUPFILE[i]} ] && rsync -vzrtopg --delete --exclude="*.log" --exclude="*.log.*" --exclude="^logs$"  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]}/ ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
 	done
 
 }
 #	主程序
 function F_BACKUP () {
 	for i in `echo $2`; do
+		[ -z $NEEDBACKUPDIR ] && echo "请输入需备份目录" 
 		IP="$1" ;NEEDBACKUPDIR="$i" ;TOBACKUPDIR="$3" ;
 		F_MKFILE $TOBACKUPDIR/$IP/temp/${NEEDBACKUPDIR}_${DATE}
 		F_NEEDBACKUPFILE $IP $NEEDBACKUPDIR 
@@ -80,4 +83,5 @@ function F_BACKUP () {
 #F_BACKUP 10.40.100.42 /data /data/backup 
 
 #F_BACKUP 10.40.100.47 /data /data/backup 
+F_BACKUP 127.0.0.1 /data/mysql/data /data/backup 
 	
