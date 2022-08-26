@@ -1,10 +1,11 @@
 #!/bin/bash
 #git:https://github.com/QMJQ
-#blog:http://qmjq.github.io 
+#blog:http://qmjq.github.io
 #     http://qiaomiao.blog.51cto.com
-#date: 20180403 v1.0
+#date: 20180403 v2.0 20220823
 #author:QMJQ
 #description: backup remote or local file
+
 
 #全局变量
 
@@ -13,7 +14,8 @@ WHOAMI=$(whoami)
 LOG=${0}.${DATE}.log
 TOBACKUPDIR=/data/backup
 NEEDBACKUPDIR=" "
-KEEPDAY=1
+IP="localhost"
+KEEPDAY=7
 
 
 #	删除创建文
@@ -32,8 +34,10 @@ function F_SSHD () {
 }	
 #	需要备份目录
 function F_NEEDBACKUPFILE (){
+	[ $1 = "localhost" -o $1 = "127.0.0.1" ] && NEEDBACKUPFILE=($(find $2 -maxdepth 1  \( -path "$2/lost+found" -o -path "$2/backup" -o -path "$2/*.log" -o -path "$2/brick*" \) -prune -o  -path "*" -print | awk -F"$2/" '{print $2}' |awk 'NF'))
 	#find 理论上用""就可以，但是两次函数转换，所以用了 '""'
-	NEEDBACKUPFILE=($(F_SSHD $1 "find $2 -maxdepth 1  \( -path "$2/lost+found" -o -path "$2/backup" -o -path '"$2/*.log"' -o -path '"$2/brick*"' \) -prune -o  -path '"*"' -print" | awk -F"$2/" '{print $2}' |awk 'NF'))
+	[ $1 = "localhost" -o $1 = "127.0.0.1" ] || NEEDBACKUPFILE=($(F_SSHD $1 "find $2 -maxdepth 1  \( -path "$2/lost+found" -o -path "$2/backup" -o -path '"$2/*.log"' -o -path '"$2/brick*"' \) -prune -o  -path '"*"' -print" | awk -F"$2/" '{print $2}' |awk 'NF'))
+	
 	echo ${NEEDBACKUPFILE[@]}
 }
 #	备份函数
@@ -43,16 +47,20 @@ function F_RSYNC () {
 
 	for ((i=0;i<$num;i++))
 	do      
-  		[ -f $2/${NEEDBACKUPFILE[i]} ] && rsync -vzrtopg --delete  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]} ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
-  		[ -d $2/${NEEDBACKUPFILE[i]} ] && rsync -vzrtopg --delete --exclude="*.log" --exclude="*.log.*" --exclude="^logs$"  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]}/ ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
+  		[ $1 = "localhost" -o $1 = "127.0.0.1" ] && [ -f $2/${NEEDBACKUPFILE[i]} ] && rsync -vzrtopg --delete  $2/${NEEDBACKUPFILE[i]} ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
+  		[ $1 = "localhost" -o $1 = "127.0.0.1" ] && [ -d $2/${NEEDBACKUPFILE[i]} ] && rsync -vzrtopg --delete --exclude="*.log" --exclude="*.log.*" --exclude="^logs$"  $2/${NEEDBACKUPFILE[i]}/ ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
+  	
+		echo ".............................."	
+		[ $1 = "localhost" -o $1 = "127.0.0.1" ] || [ -d $2/${NEEDBACKUPFILE[i]} ] || rsync -vzrtopg --delete  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]} ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
+  		[ $1 = "localhost" -o $1 = "127.0.0.1" ] || [ -f $2/${NEEDBACKUPFILE[i]} ] || rsync -vzrtopg --delete --exclude="*.log" --exclude="*.log.*" --exclude="^logs$"  $WHOAMI@$1:$2/${NEEDBACKUPFILE[i]}/ ${TOBACKUPDIR}/$1/temp/$2_${DATE}/${NEEDBACKUPFILE[i]}
 	done
 
 }
 #	主程序
 function F_BACKUP () {
 	for i in `echo $2`; do
-		[ -z $NEEDBACKUPDIR ] && echo "请输入需备份目录" 
 		IP="$1" ;NEEDBACKUPDIR="$i" ;TOBACKUPDIR="$3" ;
+		[ -z $NEEDBACKUPDIR ] && echo "请输入需备份目录" && exit 1 
 		F_MKFILE $TOBACKUPDIR/$IP/temp/${NEEDBACKUPDIR}_${DATE}
 		F_NEEDBACKUPFILE $IP $NEEDBACKUPDIR 
         	F_RSYNC $IP $NEEDBACKUPDIR		  
