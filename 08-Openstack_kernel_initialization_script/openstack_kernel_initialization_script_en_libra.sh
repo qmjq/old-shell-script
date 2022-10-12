@@ -22,21 +22,22 @@ echo "
 	
 # add by qmjq qmjq.github.io
 	
-	 *       soft    nofile  65536 
- 	 *       hard    nofile  65536 
-	 *       soft    nproc   65536 
-	 *       hard    nproc   65536 
+	 *       soft    nofile  655360 
+ 	 *       hard    nofile  655360 
+	 *       soft    nproc   655360 
+	 *       hard    nproc   655360 
 	 *       soft    core    unlimited 
 	 *       hard    core    unlimited  " >>  /etc/security/limits.conf
 # centos's 20-nproc.conf
     rm -rf /etc/security/limits.d/20-nproc.conf 
 echo "
 
-# add by qmjq qmjq.github.io 
+# add by qmjq qmjq.github.io
 
+	#fs.nr_open = 1048576 #default is 1048576
 	fs.file-max=655360           
 	vm.max_map_count=655360
-	net.core.somaxconn = 10240
+	net.core.somaxconn = 10240 #default is 128
 	vm.overcommit_memory = 1  
 # For more information, see sysctl.conf(5) and sysctl.d(5).
 
