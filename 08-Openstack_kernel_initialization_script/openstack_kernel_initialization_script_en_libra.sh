@@ -45,21 +45,19 @@ echo "
 	    #net.ipv6.conf.default.disable_ipv6 = 1
 	    #net.ipv6.conf.lo.disable_ipv6 = 1
 	    vm.swappiness = 10
-	    net.ipv4.neigh.default.gc_stale_time=120
-
-	    net.ipv4.conf.all.rp_filter=0
-	    net.ipv4.conf.default.rp_filter=0
-	    net.ipv4.conf.default.arp_announce = 2
-	    net.ipv4.conf.lo.arp_announce=2
-	    net.ipv4.conf.all.arp_announce=2
-
-	    net.ipv4.tcp_max_tw_buckets = 5000
-	    net.ipv4.tcp_fin_timeout = 10
-	    net.ipv4.tcp_tw_reuse = 1    #Allow TIME-WAIT sockets to be reused for new TCP connections
-	    net.ipv4.tcp_syncookies = 1
-	    net.ipv4.tcp_max_syn_backlog = 10240
-	    net.ipv4.tcp_synack_retries = 2
-	    net.ipv4.tcp_syn_retries = 3
+            net.ipv4.neigh.default.gc_stale_time=120
+            net.ipv4.conf.all.rp_filter=0
+            net.ipv4.conf.default.rp_filter=0
+            net.ipv4.conf.default.arp_announce = 2
+            net.ipv4.conf.lo.arp_announce=2
+            net.ipv4.conf.all.arp_announce=2
+            net.ipv4.tcp_max_tw_buckets = 5000 #The default value is 16384, which can be adjusted to a smaller size. It should not be set to  tcp_tw_recycle=1 on the public network
+            net.ipv4.tcp_tw_reuse = 1    #Allow TIME-WAIT sockets to be reused for new TCP connections
+            net.ipv4.tcp_fin_timeout = 10 #default 60
+            net.ipv4.tcp_syncookies = 1
+            net.ipv4.tcp_max_syn_backlog = 10240
+            net.ipv4.tcp_synack_retries = 2 #default 5
+            net.ipv4.tcp_syn_retries = 3  #default 6
 	    kernel.sysrq=1           " >>  /etc/sysctl.conf
 
 sysctl -p && ulimit -a
