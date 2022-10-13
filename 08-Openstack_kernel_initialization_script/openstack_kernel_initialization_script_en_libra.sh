@@ -32,32 +32,36 @@ echo "
     rm -rf /etc/security/limits.d/20-nproc.conf 
 echo "
 
-# add by qmjq qmjq.github.io
-
-	#fs.nr_open = 1048576 #default is 1048576
-	fs.file-max=655360           
-	vm.max_map_count=655360
-	net.core.somaxconn = 10240 #default is 128
-	vm.overcommit_memory = 1  
+# add by jingge qmjq.github.io
+        #fs.nr_open = 1048576 #default is 1048576
+        fs.file-max=655360
+        vm.max_map_count=655360
+        #default is 128
+        net.core.somaxconn=10240
+        vm.overcommit_memory = 1
 # For more information, see sysctl.conf(5) and sysctl.d(5).
-
-	    #net.ipv6.conf.all.disable_ipv6 = 1
-	    #net.ipv6.conf.default.disable_ipv6 = 1
-	    #net.ipv6.conf.lo.disable_ipv6 = 1
-	    vm.swappiness = 10
+            #net.ipv6.conf.all.disable_ipv6 = 1
+            #net.ipv6.conf.default.disable_ipv6 = 1
+            #net.ipv6.conf.lo.disable_ipv6 = 1
+            vm.swappiness = 10
             net.ipv4.neigh.default.gc_stale_time=120
             net.ipv4.conf.all.rp_filter=0
             net.ipv4.conf.default.rp_filter=0
             net.ipv4.conf.default.arp_announce = 2
             net.ipv4.conf.lo.arp_announce=2
             net.ipv4.conf.all.arp_announce=2
-            net.ipv4.tcp_max_tw_buckets = 5000 #The default value is 16384, which can be adjusted to a smaller size. It should not be set to  tcp_tw_recycle=1 on the public network
-            net.ipv4.tcp_tw_reuse = 1    #Allow TIME-WAIT sockets to be reused for new TCP connections
-            net.ipv4.tcp_fin_timeout = 10 #default 60
+            #The default value is 16384, which can be adjusted to a smaller size. It should not be set to  tcp_tw_recycle=1 on the public network
+            net.ipv4.tcp_max_tw_buckets = 5000
+            #Allow TIME-WAIT sockets to be reused for new TCP connections
+            net.ipv4.tcp_tw_reuse = 1
+            #default 60
+            net.ipv4.tcp_fin_timeout = 10
             net.ipv4.tcp_syncookies = 1
             net.ipv4.tcp_max_syn_backlog = 10240
-            net.ipv4.tcp_synack_retries = 2 #default 5
-            net.ipv4.tcp_syn_retries = 3  #default 6
+            #default 5
+            net.ipv4.tcp_synack_retries = 2
+            #default 6
+            net.ipv4.tcp_syn_retries = 3
 	    kernel.sysrq=1           " >>  /etc/sysctl.conf
 
 sysctl -p && ulimit -a
